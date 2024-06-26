@@ -12,9 +12,9 @@ def view_tables(tables):
         print(table)
 view_tables(tables)
 
-reservations = {}
 
-def make_reservation(tables, reservations):
+def make_reservation(tables):
+    reservations = []
     #List requirement in reserving a table.
     name = input("Enter your name: ")
     contact = input("Enter your contact number: ")
@@ -28,19 +28,24 @@ def make_reservation(tables, reservations):
     if not available_tables:
         print("No available tables for your party size.")
         return
+    
     print("Available tables: ")
+    numbers = [] #A list to store the table numbers.
     for table in available_tables:
-        numbers = table['table']
+        number = table['table']
         print(f"Table {table['table']} - Seats {table['seats']}")
-        # print(numbers)
-        #Make a reservation from the available tables.
-        table_number = int(input("Enter the desired table number: "))
-        if table_number != numbers:
-            print("Invalid table number.")
-            return
+        numbers.append(number)
 
-    # for i in table_numbers:
+    #Make a reservation from the available tables.
+    table_number = int(input("Enter the desired table number: "))
+    if table_number not in numbers:
+        print("Invalid table number.")
+        return
     reservation = {'name': name, 'party-size': party_size}
+    if reservation not in reservations:
+        reservations.append(reservation)
+    else:
+        print("Already reserved.")
     print(f"The table {table_number} has been succesfully reserved for {name}.")
-
-make_reservation(tables, reservations)
+    return
+make_reservation(tables)
