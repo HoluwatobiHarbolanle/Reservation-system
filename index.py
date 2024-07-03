@@ -59,7 +59,7 @@ def make_reservation(tables, reservations):
         print(f"Error saving reservation: {e}")
 
 
-# make_reservation(tables, reservations_file)
+make_reservation(tables, reservations_file)
 
 def cancel_reservation(reservations):
     name_to_cancel = input("Enter the name of reservation to cancel: ") #Prompt the user for the name of reservation to cancel
