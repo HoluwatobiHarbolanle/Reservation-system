@@ -1,5 +1,5 @@
 import csv
-import os
+# import os
 tables = [
     {'table': 1, 'seats': 6},
     {'table': 2, 'seats': 5},
@@ -51,7 +51,7 @@ def make_reservation(tables, reservations):
         #Open the reservation file in an append mode.
         with open(reservations, mode='a', newline= '') as file:
             writer = csv.writer(file) #Create a writer object.
-            writer.writerow(new_row) #Write in list in a row.
+            writer.writerow(new_row) #Write the list in a row.
         #Print that a successful reservation is accomplished.
         print(f"The table {table_number} has been succesfully reserved for {name} on {date} starting from {start_time} to {end_time}.")
     except Exception as e:
@@ -59,7 +59,7 @@ def make_reservation(tables, reservations):
         print(f"Error saving reservation: {e}")
 
 
-make_reservation(tables, reservations_file)
+# make_reservation(tables, reservations_file)
 
 def cancel_reservation(reservations):
     name_to_cancel = input("Enter the name of reservation to cancel: ") #Prompt the user for the name of reservation to cancel
@@ -73,7 +73,9 @@ def cancel_reservation(reservations):
             del reservationss[reservationss.index(reservation)] #Identify the reservation with the index from the file content and delete.
             print(f"Reservation for name {name_to_cancel} has been successfully cancelled!")
             break #Break the loop afterwards.
-
+        else :
+            print("Name not found.")
+            break
     #Open the file again in a write mode.
     with open(reservations, mode="w", newline="") as file:
         writer = csv.writer(file) #Create the file object.
@@ -84,8 +86,8 @@ cancel_reservation(reservations_file)
 #Write another function to view the availability of tables.
 def view_reservations(reservations):
     #Prompt users to input the date and start time.
-    date = input("Enter the date (yy-mm-dd):") 
-    time = input("Enter the start time (hh:mm):")
+    date = input("Enter the date (yy-mm-dd): ") 
+    time = input("Enter the start time (hh:mm): ")
     with open(reservations, 'r') as file: #Open the file in a read mode.
         #Create a reader object and create a variable as it's placeholder.
         reader = csv.reader(file)
