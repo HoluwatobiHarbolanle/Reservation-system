@@ -28,7 +28,7 @@ def make_reservation(tables, reservations):
     end_time = input("Enter event end-time (HH:MM): ") #Enter the end time of the event.
 
     #Write a function to get the available tables.
-    available_tables = [table for table in tables if table['seats'] >= party_size]
+    available_tables = [table for table in tables if table['seats'] >= party_size] # and table['table'] not in reservations]
     if not available_tables:
     #If the condition to know the available tables is not true.
         print("No available tables for your party size.")
@@ -59,45 +59,65 @@ def make_reservation(tables, reservations):
         print(f"Error saving reservation: {e}")
 
 
-make_reservation(tables, reservations_file)
+# make_reservation(tables, reservations_file)
 
 def cancel_reservation(reservations):
-    name_to_cancel = input("Enter the name of reservation to cancel: ") #Prompt the user for the name of reservation to cancel
-
+    #Prompt the user for the details of table to cancel.
+    table_number = int(input("Enter the number of table reservation to cancel: "))
+    date = input("Enter the date reserved: ")
+    time = input("Enter the event start time: ")
     with open(reservations, mode= "r") as file: #Open the file in a read mode
         reader = csv.reader(file)
-        reservationss = list(reader) #Save the reader object to a variable and change to list to allow modification since by default, it is now an iterator and can't be modified.
+        reservations_content = list(reader)
+        #Save the reader object to a variable and change to list to allow modification since by default, it is now an iterator and can't be modified.
 
-    for reservation in reservationss: #Loop through the lists.
-        if reservation[1] == name_to_cancel: #Check if the name of the current reservation matches the user's input.
-            del reservationss[reservationss.index(reservation)] #Identify the reservation with the index from the file content and delete.
-            print(f"Reservation for name {name_to_cancel} has been successfully cancelled!")
+    for reservation in reservations_content: #Loop through the lists.
+        if reservation[0] == table_number and reservation[4] == date and reservation[5] == time: 
+            #Check if the name of the current reservation matches the user's input.
+            del reservations_content[reservations_content.index(reservation)] #Identify the reservation with the index from the file content and delete.
+            print(f"Reservation for {reservation[1]} has been successfully cancelled!")
             break #Break the loop afterwards.
         else :
-            print("Name not found.")
+            print("Details not matched.")
             break
     #Open the file again in a write mode.
     with open(reservations, mode="w", newline="") as file:
         writer = csv.writer(file) #Create the file object.
-        writer.writerows(reservationss) # Write the updated list back into the file. If not written, the update will be temporary and the file will still retain it's original content.
+        writer.writerows(reservations_content) # Write the updated list back into the file. If not written, the update will be temporary and the file will still retain it's original content.
 
-cancel_reservation(reservations_file)
+# cancel_reservation(reservations_file)
 
 #Write another function to view the availability of tables.
 def view_reservations(reservations):
     #Prompt users to input the date and start time.
-    date = input("Enter the date (yy-mm-dd): ") 
-    time = input("Enter the start time (hh:mm): ")
+    # date = input("Enter the date (yy-mm-dd): ") 
+    # time = input("Enter the start time (hh:mm): ")
     with open(reservations, 'r') as file: #Open the file in a read mode.
         #Create a reader object and create a variable as it's placeholder.
         reader = csv.reader(file)
         reservations = list(reader)
     for i in reservations: #Loop through the reservations to check available date and time.
-        if i[3] == date and i[4] == time:
-            print(f"The date {date} and start time {time} has been taken.")
-            break
-        else :
-            print(f"The date {date} and start time {time} are available.")
-            break
+        print(i)
 
-view_reservations(reservations_file)
+# view_reservations(reservations_file)
+
+def options():
+    print("\n1. Make reservation\n2. Cancel reservation\n3. View reservation\n4. Exit")
+    try:
+        choice = int(input("Make a choice? "))
+    except ValueError:
+        print("An integer is required.")
+        return
+    while True:
+        if choice == 1:
+            make_reservation(tables, reservations_file)
+        elif choice == 2:
+            cancel_reservation(reservations_file)
+        elif choice == 3:
+            view_reservations(reservations_file)
+        elif choice == 4:
+            print("App exited!")
+        else :
+            print("Invalid choice! Try again.")
+        break
+options()
